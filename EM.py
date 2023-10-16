@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.constants as constants
 
+# NEED TO IMPLEMENT SOLVING ONLY IN PLANE OF INTEREST OPTION
+
 class EM():
     def __init__(self, lims = (-10, 11), res = 1) -> None:
         self.q_e = constants.e
@@ -26,9 +28,9 @@ class EM():
 
         return R
     
-    def E(self, Q, max_len = np.inf):
+    def E(self, charge_distribution, max_len = np.inf):
         Ex, Ey, Ez = np.zeros((self.X.shape[0], self.Y.shape[0], self.Z.shape[0])), np.zeros((self.X.shape[0], self.Y.shape[0], self.Z.shape[0])), np.zeros((self.X.shape[0], self.Y.shape[0], self.Z.shape[0]))
-        for q,x,y,z in Q:
+        for q,x,y,z in charge_distribution:
             rSource = np.array([x, y, z])
             r = self.R - rSource
             for i in range(self.X.shape[0]):
@@ -37,15 +39,10 @@ class EM():
                         rMag = np.linalg.norm(r[i, j, k])
                         if rMag > 0.:
                             rHat = r[i, j, k] / rMag
-                            E = self.k * q * rHat / rMag**2
-                            Ex[i, j, k] += E[0]
-                            Ey[i, j, k] += E[1]
-                            Ez[i, j, k] += E[2]
-                    # rMag = np.linalg.norm(r[i, j])
-                    # rHat = r[i, j] / rMag
-                    # E = self.k * q * rHat / rMag**2
-                    # Ex[i, j] += E[0]
-                    # Ey[i, j] += E[1]
+                            dE = self.k * q * rHat / rMag**2
+                            Ex[i, j, k] += dE[0]
+                            Ey[i, j, k] += dE[1]
+                            Ez[i, j, k] += dE[2]
 
         self.arrowFitler((Ex, Ey, Ez), max_len)
         return Ex, Ey, Ez
@@ -81,18 +78,20 @@ class EM():
         else:
             raise ValueError("Slice must be a float between -1 and 1.")
         
+        cDict = {-1: 'b', 0: 'k', 1: 'r'}
+
         if plane == 'xy':
             plt.quiver(self.X[:, :, idx], self.Y[:, :, idx], F[0][:, :, idx], F[1][:, :, idx])
             if locQ is not None:
-                plt.scatter([q[1] for q in locQ], [q[2] for q in locQ], color='r', s=pt_size)
+                plt.scatter([q[1] for q in locQ], [q[2] for q in locQ], color=[cDict[np.sign(q[0])] for q in locQ], s=pt_size)
         elif plane == 'xz':
-            plt.quiver(self.X[idx, :, :], self.Z[idx, :, :], F[0][idx, :, :], F[2][idx, :, :]) # xz plane
+            plt.quiver(self.X[idx, :, :], self.Z[idx, :, :], F[0][idx, :, :], F[2][idx, :, :])
             if locQ is not None:
-                plt.scatter([q[1] for q in locQ], [q[3] for q in locQ], color='r', s=pt_size)
+                plt.scatter([q[1] for q in locQ], [q[3] for q in locQ], color=[cDict[np.sign(q[0])] for q in locQ], s=pt_size)
         elif plane == 'yz':
             plt.quiver(self.Y[:, idx, :], self.Z[:, idx, :], F[1][:, idx, :], F[2][:, idx, :])
             if locQ is not None:
-                plt.scatter([q[2] for q in locQ], [q[3] for q in locQ], color='r', s=pt_size)
+                plt.scatter([q[2] for q in locQ], [q[3] for q in locQ], color=[cDict[np.sign(q[0])] for q in locQ], s=pt_size)
         else:
             raise ValueError("Plane must be one of 'xy', 'xz', or 'yz'.")
 
