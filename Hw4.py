@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.constants as constants
 import EM as EMPackage
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 em = EMPackage.EM(res = .5)
 

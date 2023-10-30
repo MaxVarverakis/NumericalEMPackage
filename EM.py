@@ -47,6 +47,20 @@ class EM():
         self.arrowFitler((Ex, Ey, Ez), max_len)
         return Ex, Ey, Ez
 
+    def V(self, charge_distribution):
+        V = np.zeros((self.X.shape[0], self.Y.shape[0], self.Z.shape[0]))
+        for q,x,y,z in charge_distribution:
+            rSource = np.array([x, y, z])
+            r = self.R - rSource
+            for i in range(self.X.shape[0]):
+                for j in range(self.Y.shape[0]):
+                    for k in range(self.Z.shape[0]):
+                        rMag = np.linalg.norm(r[i, j, k])
+                        if rMag > 0.:
+                            V[i, j, k] += self.k * q / rMag
+
+        return V
+
     def arrowFitler(self, F: tuple, max_len):
         Fx, Fy, Fz = F
         for i in range(Fx.shape[0]):
@@ -60,7 +74,43 @@ class EM():
                 #     Fx[i, j] = 0
                 #     Fy[i, j] = 0
 
-    def plotPlane(self, F: tuple, plane: str, locQ = None, slice: int = 0, title = '', pt_size = 5):
+    def plotV(self, F, plane: str, locQ = None, slice: int = 0, title = '', pt_size = 5, cmap = 'RdBu', vmin = None, vmax = None, show = True):
+        if -1 <= slice <= 1:
+            idx = int((slice + 1) * (self.X.shape[0] - 1) / 2)
+        else:
+            raise ValueError("Slice must be a float between -1 and 1.")
+        
+        cDict = {-1: 'b', 0: 'k', 1: 'r'}
+
+        if plane == 'xy':
+            plt.pclormesh(self.X[:, :, idx], self.Y[:, :, idx], F[:, :, idx], cmap = cmap, vmin = vmin, vmax = vmax)
+            if locQ is not None:
+                plt.scatter([q[1] for q in locQ], [q[2] for q in locQ], color=[cDict[np.sign(q[0])] for q in locQ], s=pt_size)
+        elif plane == 'xz':
+            plt.pcolormesh(self.X[idx, :, :], self.Z[idx, :, :], F[idx, :, :], cmap = cmap, vmin = vmin, vmax = vmax)
+            if locQ is not None:
+                plt.scatter([q[1] for q in locQ], [q[3] for q in locQ], color=[cDict[np.sign(q[0])] for q in locQ], s=pt_size)
+        elif plane == 'yz':
+            plt.pcolormesh(self.Y[:, idx, :], self.Z[:, idx, :], F[:, idx, :], cmap = cmap, vmin = vmin, vmax = vmax)
+            if locQ is not None:
+                plt.scatter([q[2] for q in locQ], [q[3] for q in locQ], color=[cDict[np.sign(q[0])] for q in locQ], s=pt_size)
+        else:
+            raise ValueError("Plane must be one of 'xy', 'xz', or 'yz'.")
+        
+        cb = plt.colorbar()
+        cb.formatter.set_useMathText(True)
+        cb.formatter.set_powerlimits((0, 0))
+        cb.set_label(r'$V(\vec{r})$', fontsize = 18)
+        plt.xlabel(plane[0])
+        plt.ylabel(plane[1])
+        plt.title(title)
+        plt.xlim(self.lims[0], self.lims[1] - 1)
+        plt.ylim(self.lims[0], self.lims[1] - 1)
+        plt.gca().set_aspect('equal', adjustable='box')
+        if show:
+            plt.show()
+
+    def plotPlane(self, F: tuple, plane: str, locQ = None, slice: int = 0, title = '', pt_size = 5, show = True):
         '''
         Parameters
         ----------
@@ -101,7 +151,8 @@ class EM():
         plt.xlim(self.lims[0], self.lims[1] - 1)
         plt.ylim(self.lims[0], self.lims[1] - 1)
         plt.gca().set_aspect('equal', adjustable='box')
-        plt.show()
+        if show:
+            plt.show()
 
 
 
