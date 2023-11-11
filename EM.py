@@ -85,6 +85,20 @@ class EM3D():
         self.arrowFitler((Bx, By, Bz), max_len)
         return Bx, By, Bz
 
+    def B_tot(self, wire_distribution: list, wire_reference_points = 100, max_len = np.inf):
+        Bx = np.zeros(self.X.shape)
+        By = np.zeros(self.Y.shape)
+        Bz = np.zeros(self.Z.shape)
+
+        for I, direction, point in wire_distribution:
+            Bx1, By1, Bz1 = self.B_infinite_wire(direction, point, I, wire_reference_points)
+            Bx += Bx1
+            By += By1
+            Bz += Bz1
+
+        self.arrowFitler((Bx, By, Bz), max_len)
+        return Bx, By, Bz
+
     def V(self, charge_distribution):
         V = np.zeros((self.X.shape[0], self.Y.shape[0], self.Z.shape[0]))
         for q,x,y,z in charge_distribution:
