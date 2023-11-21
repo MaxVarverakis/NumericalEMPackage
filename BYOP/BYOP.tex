@@ -7,7 +7,7 @@
 \usepackage{enumitem}
 
 % Related to math
-\usepackage{amsmath,amssymb,amsfonts,amsthm,bm}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,bm, cancel}
 
 % \newcommand{\ddx}[1][f{(x)}]{\frac{d}{dx}\left(#1\right)}
 % cartesian
@@ -17,6 +17,7 @@
 \newcommand{\rhat}{\hat{\textbf{r}}}
 \newcommand{\thetahat}{\hat{\bm{\theta}}}
 \newcommand{\phihat}{\hat{\bm{\phi}}}
+\newcommand{\vphihat}{\hat{\bm{\varphi}}}
 \newcommand{\shat}{\hat{\textbf{s}}}
 \newcommand{\del}{\vec{\nabla}}
 
@@ -143,6 +144,110 @@ Plotting the electric field as a function of $r$:
 Interestingly, there is a maximum in the electric field strength part way into the thick shell. This is due to the interplay between the decaying charge density as a function of $r$ (when $r\in(a,b)$) with the fact that $Q_\textrm{enc}$ increases as $r$ increases from $a\to b$. Furthermore, we find that the electric field is zero inside the inner radius $a$ as predicted by Gauss' Law. Outside the outer radius $b$, the electric field decays as $\frac{1}{r^2}$ as expected due to the fact that the charge enclosed is not changing after this point.
 
 These results are similar to the original Griffiths solution in that the electric field is zero inside the inner radius $a$ and decays as $\frac{1}{r^2}$ outside the outer radius $b$. In this case, the interesting charge distribution involving $\cosh(r)$ shifted the maximum electric field strength to a point part way into the thick shell rather than at the outer boundary. However, as we can see in Figure~\ref{fig:thick_shell}, if $b$ is made close enough to $a$ (i.e., the shell is made quite thin), then the maximum electric field strength will be at the outer boundary $b$ as expected.
+\clearpage
+
+\section*{\underline{Griffiths 5.4}}
+This problem has us calculate the force on a square loop (side length $a$, centered at the origin) of wire with current $I$ when placed in a magnetic field $\vec{B} = kz\xhat$, where $k$ is a constant. After some nice cancellation, we find that $\vec{F} = Ika^2$.
+
+\subsection*{Adaptation}
+I want to again find the net force on the square loop of wire, but this time with a more complicated magnetic field: $\vec{B} = \frac{kz}{\cosh(z)}\xhat$. After an in depth calculation, we will redo the problem with $\vec{B} = \frac{kz}{\sinh(z)}\xhat$ (with the hole filled at $(0,1)$). This will serve as a talking point about the symmetry of the functions and how it affects the overall solution.
+
+\subsection*{Solution}
+We first refer to the following diagram, where we have labeled four segments of the current in the square loop. We will handle each of these sections individually.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width = .5\textwidth]{5.4.png}
+	\caption{Schematic of square loop of wire with current $I$ in a magnetic field $\vec{B} = \frac{kz}{\cosh(z)}\xhat$. The blue serves as a visual guide for the general behavior of $\vec{B}$ inside the loop, but is not meant for analytical purposes.}\label{fig:5.4}
+\end{figure}
+
+A more detailed visualization of the magnetic field is below.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width = .5\textwidth]{BFieldCosh.png}
+	\caption{Magnetic field magnitude when $\vec{B} = \frac{kz}{\cosh(z)}\xhat$.}\label{fig:B_cosh}
+\end{figure}
+
+To find the total force on the loop, first recall that the force on a (constant) current-carrying wire in a magnetic field is given by
+\begin{equation}
+	\vec{F} = I\int d\vec{\ell}\times\vec{B}.
+\end{equation}
+
+Since the current is the same across all four labeled parts of our square loop, this gives
+\begin{align}
+	\vec{F}_\textrm{tot} &= I\left[ \int_1d\vec{\ell}_1\times\vec{B} + \int_2d\vec{\ell}_2\times\vec{B} + \int_3d\vec{\ell}_3\times\vec{B} + \int_4d\vec{\ell}_4\times\vec{B} \right].
+\end{align}
+Notice that $d\vec{\ell}_1$ is in the $-\zhat$ direction whereas $d\vec{\ell}_2$ is in the $+\zhat$ direction. For every point (defined by $z$) along wire segment 1 and 3, $\vec{B}(z)$ is the same, but their respective $d\vec{\ell}$ are in opposite directions. Therefore, the integrals over segments 1 and 3 cancel out. Similarly, $d\vec{\ell}$ for segments 2 and 4 are in opposite directions ($\yhat$ and $-\yhat$, respectively), but $\vec{B}(z)$ has opposite sign in either case (as can be seen by the blue aid drawn in Figure~\ref{fig:5.4}). Thus, due to negatives from $d\vec{\ell}$ compensating for the corresponding negative from $\vec{B}$ in the other segment, the integrals over segments 2 and 4 have the same sign. Since segment 2 is at $z=-a/2$ and segment 4 is at $z=a/2$ (and since $\vec{B}(z)$ is an odd function), the magnetic field at each of these two segments is exactly opposite by a sign. Therefore, the integrals over segments 2 and 4 are the same. Also, this means that $\vec{B}$ is constant along each of these two segments, so we can pull it outside of the integrals.
+
+So we really only need to calculate the integral over segment 2 and multiply by 2. Along segment 2, $\vec{B}$ is in the $\xhat$ direction as can be verified by the right-hand rule.
+\begin{align}
+	\vec{F}_4 &= I \int_4d\vec{\ell}_2\times\vec{B} \\
+	&= I \int_{\frac{-a}{2}}^{\frac{a}{2}}dy\yhat\times\vec{B}\left(z=\frac{-a}{2}\right) \\
+	&= I \frac{k\left(\frac{-a}{2}\right)}{\cosh\left(\frac{-a}{2}\right)}\int_{\frac{-a}{2}}^{\frac{a}{2}}dy\yhat\times\xhat \\
+	&= I \frac{k\left(\frac{-a}{2}\right)}{\cosh\left(\frac{-a}{2}\right)}\left[ \frac{a}{2} - \frac{-a}{2} \right](-\zhat) \\
+	&= \boxed{I \frac{k\left(\frac{a^2}{2}\right)}{\cosh\left(\frac{a}{2}\right)}\zhat},
+\end{align}
+where the negative inside the argument of $\cosh$ was dropped because it is an even function. Thus, the total force on the loop is
+\begin{equation}
+	\boxed{\vec{F}_\textrm{tot} = 2I \frac{k\left(\frac{a^2}{2}\right)}{\cosh\left(\frac{a}{2}\right)}\zhat}.
+\end{equation}
+
+This answer agrees with our intuition on the textbook solution. The forces due to the sides of the loop cancel, and the sign change of the $\vec{B}$-field compensates for the sign change of the $d\vec{\ell}$ in the two horizontal segments, which results in a total force in the $\zhat$ direction. Although the $\vec{B}$-field in this adapted problem is more complicated, it is still odd like the original problem, so the same interaction with the segments occurs.
+
+\clearpage
+Now instead, suppose we consider $\vec{B} = \frac{kz}{\sinh(z)}\xhat$. The magnetic field magnitude is shown in Figure~\ref{fig:B_sinh}.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width = .5\textwidth]{BFieldSinh.png}
+	\caption{Magnetic field magnitude when $\vec{B} = \frac{kz}{\sinh(z)}\xhat$.}\label{fig:B_sinh}
+\end{figure}
+
+In this case, the calculation of $\vec{F}_\textrm{tot}$ is similar to the earlier calculation, however we must be cautious about negative signs. In this case, as can be seen in Figure~\ref{fig:B_sinh}, $\vec{B}(z)$ is an even function, which means that the sign of the magnetic field does not change for positive and negative $z$ values. We continue our approach to solving for $\vec{F}_\textrm{tot}$ as before, and write
+\begin{align}
+	\vec{F}_\textrm{tot} &= I\left[ \int_1d\vec{\ell}_1\times\vec{B} + \int_2d\vec{\ell}_2\times\vec{B} + \int_3d\vec{\ell}_3\times\vec{B} + \int_4d\vec{\ell}_4\times\vec{B} \right],
+\end{align}
+with the familiar labeling scheme in Figure~\ref{fig:5.4}.
+
+
+Following the same argument as previously, the forces due to segments 1 and 3 (the left and right sides of the square) cancel out since the magnetic field is the same at each $z$ value along those segments, and the opposite sign of $d\vec{\ell}$ causes them to cancel at every $z$. When $\vec{B}$ was an odd function, the negative sign flipped when looking from segment 2 to segment 4. However, now the sign of $\vec{B}$ does not change when looking at segment 2 versus segment 4. This means that $\vec{B}\left(\frac{-a}{2}\right) = \vec{B}\left(\frac{a}{2}\right)$. Since $d\vec{\ell}_2 = -d\vec{\ell}_4$ as before, we have the integral over segment 2 is exactly opposite the value of the integral over segment 4. Therefore, these integrals cancel as well. We are left with zero fores on the loop, i.e. $\boxed{\vec{F}_\textrm{tot} = 0}$. 
+
+In this particular case, things add/cancel nicely due to the magnetic field having a symmetry about the symmetries of our square loop of wire. When the magnetic fields are more complicated, however, we cannot always assume that things will cancel as they did here.
+
+\clearpage
+
+\section*{\underline{Griffiths 5.24}}
+This original problem asks us to find the current density $\vec{J}$ that would produce the magnetic vector potential $\vec{A} = k\vphihat$, where $k$ is a constant, in cylindrical coordinates. The solution is $\vec{J} = \frac{1}{\mu_0}\frac{k}{s^2}\vphihat$, which makes sense because the current density often agrees with the direction of the magnetic vector potential.
+
+\subsection*{Adaptation}
+The adaptation of this problem involves finding the current density $\vec{J}$ that would produce the magnetic vector potential $\vec{A} = \frac{k}{s}\zhat$.
+
+\subsection*{Solution}
+First, notice that the magnetic field is related to $\vec{A}$ by a cross product:
+\begin{equation}
+	\vec{B} = \del\times\vec{A}.
+\end{equation}
+Recall that the cross product in cylindrical coordinates is
+\begin{equation}
+	\del\times\vec{A} = \left( \frac{1}{s}\frac{\partial A_z}{\partial \varphi} - \frac{\partial A_\varphi}{\partial z} \right)\shat + \left( \frac{\partial A_s}{\partial z} - \frac{\partial A_z}{\partial s} \right)\vphihat + \frac{1}{s}\left( \frac{\partial}{\partial s}(s A_\varphi) - \frac{\partial A_s}{\partial \phi}  \right)\zhat.
+\end{equation}
+
+Observe that the only non-zero component of $\vec{A}$ is $A_z$ which depends only on $s$. Therefore, the cross product becomes
+\begin{align}
+	\vec{B} = \del\times\vec{A} &= -\frac{\partial A_z}{\partial s}\vphihat = -\frac{\partial}{\partial s}\left(\frac{k}{s}\right)\vphihat = \frac{k}{s^2}\vphihat.
+\end{align}
+
+Similarly, the current density is related to the magnetic field by a cross product:
+\begin{equation}
+	\vec{J} = \frac{1}{\mu_0}\del\times\vec{B}.
+\end{equation}
+
+Then we can find the current density by taking the curl of our previous answer. Once again, only one term of this cross product is nonzero since there is only one component of $\vec{B}$ (namely, $\vec{B}_\varphi$), and it depends only on $s$. This yields
+\begin{align}
+	\vec{J} = \frac{1}{\mu_0}\del\times\vec{B} = \frac{1}{\mu_0}\del\times\left(  \frac{k}{s^2}\vphihat\right) = \frac{1}{\mu_0}\frac{\partial}{\partial s}\left( \cancel{s}\frac{k}{s^{\cancel{2}}} \right)\zhat = -\frac{k}{\mu_0}\frac{1}{s^2}\zhat.
+\end{align}
+
+As in the original problem, this solution makes sense intuitively because of the agreement of the direction of $\vec{J}$ and $\vec{A}$.
+
 \clearpage
 
 \end{document}
