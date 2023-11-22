@@ -102,7 +102,7 @@ Due to the spherical symmetry, we can still leverage the power of Gauss' law to 
 \begin{itemize}
 	\item[(i)] For $r < a$, we have $Q_\textrm{enc}=0$. Since Gauss' Law states that
 	\begin{equation}
-		\oint\vec{E}\cdot d\vec{a} = \frac{Q_\textrm{enc}}{\varepsilon_0},
+		\oint\vec{E}\cdot d\vec{a} = \frac{Q_\textrm{enc}}{\varepsilon_0}\label{eq:gauss},
 	\end{equation}
 	it follows that
 	\begin{equation}
@@ -243,11 +243,47 @@ Similarly, the current density is related to the magnetic field by a cross produ
 
 Then we can find the current density by taking the curl of our previous answer. Once again, only one term of this cross product is nonzero since there is only one component of $\vec{B}$ (namely, $\vec{B}_\varphi$), and it depends only on $s$. This yields
 \begin{align}
-	\vec{J} = \frac{1}{\mu_0}\del\times\vec{B} = \frac{1}{\mu_0}\del\times\left(  \frac{k}{s^2}\vphihat\right) = \frac{1}{\mu_0}\frac{\partial}{\partial s}\left( \cancel{s}\frac{k}{s^{\cancel{2}}} \right)\zhat = -\frac{k}{\mu_0}\frac{1}{s^2}\zhat.
+	\vec{J} = \frac{1}{\mu_0}\del\times\vec{B} = \frac{1}{\mu_0}\del\times\left(  \frac{k}{s^2}\vphihat\right) = \frac{1}{\mu_0}\frac{\partial}{\partial s}\left( \cancel{s}\frac{k}{s^{\cancel{2}}} \right)\zhat = \boxed{-\frac{k}{\mu_0}\frac{1}{s^2}\zhat}.
 \end{align}
 
 As in the original problem, this solution makes sense intuitively because of the agreement of the direction of $\vec{J}$ and $\vec{A}$.
 
 \clearpage
+
+\section*{\underline{Griffiths 4.10}}
+The original problem asks to find the bound charges and the electric field inside and outside a sphere of radius $R$ with polarization $\vec{P}(r) = kr\rhat$ where ${r}$ is the distance from the center of the circle. The bound surface and volume charges are equal and opposite in total, so the external electric field is zero. The internal electric field is $\vec{E} = \frac{-k}{\varepsilon_0}r\rhat$.
+
+\subsection*{Adaptation}
+I want to find the same quantities but with a polarization $\vec{P}({r}) = k{r}^2$.
+
+\subsection*{Solution}
+First, we will find the bound charges. We can use the familiar formulas to find the bound surface and volume charges:
+\begin{align}
+	\sigma_b &= \vec{P}\cdot\hat{\textbf{n}} = kR^2\rhat\cdot \rhat = \boxed{kR^2}, \\
+	\rho_b &= -\del\cdot\vec{P} = -\frac{1}{r^2}\frac{\partial}{\partial r}\left( r^2 kr^2 \right) = \boxed{-4kr},
+\end{align}
+where $r$ has been replaced by $R$ for $\sigma_b$ (bound surface charges) since we are on the surface of the sphere.
+
+Next, we can find the electric field inside and outside the sphere by using Gauss's Law (Eqn.~\ref{eq:gauss}). Note that our Gaussian surface is a sphere of radius $r$ such that the electric field is constant along the surface of the sphere (really, it's the electric flux, but the symmetry of the sphere ensures this based off of the geometry of our charge distributions).
+
+For $r<R$, we have
+\begin{align}
+	\oint\vec{E}\cdot d\vec{a} &= E \cdot 4\pi r^2 \\
+	&= \frac{1}{\varepsilon_0} Q_{\textrm{enc}} \nonumber\\
+	&= \frac{1}{\varepsilon_0} \int_V \rho_b d\tau \nonumber\\
+	&= \frac{1}{\varepsilon_0} \int_0^r \int_0^\pi \int_0^{2\pi} (-4kr') {r'}^2 \sin\theta d\phi d\theta dr' \nonumber\\
+	&= \frac{-4\pi k}{\varepsilon_0}r^4 \nonumber
+\end{align}
+where the first equality comes from the fact that we chose a Gaussian sphere centered about our charged sphere's center. This is the same reasoning as in the solution of the adaptation of Griffith's 2.15. We already know the direction of the electric field must be radial due to the symmetry of the problem. Therefore,
+\begin{equation}
+	\boxed{\vec{E}(r<R) = \frac{-4\pi k}{\varepsilon_0}r^4\rhat}
+\end{equation}
+
+For the case where $r>R$, we have a much simpler setup. As can be shown using Divergence Theorem (Griffiths Problem 4.14) the charge due to the bound surface and volume charges cancels out. Thus, once our Gaussian surface encloses both the entire volume of the sphere and therefore the surface of the sphere, the total charge enclosed is zero. By Gauss's Law, this implies that
+\begin{equation}
+	\boxed{\vec{E}(r>R) = 0}.
+\end{equation}
+
+This solution makes sense, since we wouldn't expect to observe an electric field outside an object that was originally neutral (the bound charges are just shuffled around, but the total charge is still zero). This result does not depend on the specific mathematics of the polarization!
 
 \end{document}

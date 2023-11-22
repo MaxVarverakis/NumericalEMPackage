@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1700608450 "/Users/max/Library/CloudStorage/OneDrive-CalPoly/Quarters/F23/Phys 408/BYOP/BYOP.tex" "BYOP.pdf" "BYOP" 1700608451 0
-  "/Users/max/Library/CloudStorage/OneDrive-CalPoly/Quarters/F23/Phys 408/BYOP/BYOP.tex" 1700608450 18334 ec24efb59a366adb0a1e53c2f0e37c87 ""
+["pdflatex"] 1700626281 "/Users/max/Library/CloudStorage/OneDrive-CalPoly/Quarters/F23/Phys 408/BYOP/BYOP.tex" "BYOP.pdf" "BYOP" 1700626282 0
+  "/Users/max/Library/CloudStorage/OneDrive-CalPoly/Quarters/F23/Phys 408/BYOP/BYOP.tex" 1700626281 21282 b36eddb1e592ee7a33fbfe46d401feec ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
@@ -98,8 +98,8 @@
   "5.4.png" 1699234665 43314 4de429f834409bae2243377c6ad51c20 ""
   "BFieldCosh.png" 1699244648 22066 7af78d217403a75003a3766e65abecd8 ""
   "BFieldSinh.png" 1699296422 21566 f2ffebe1e588e071e7f6b1fab47b2ef4 ""
-  "BYOP.aux" 1700608451 1295 048d82893f293ed07af5c01b13649ef9 "pdflatex"
-  "BYOP.tex" 1700608450 18334 ec24efb59a366adb0a1e53c2f0e37c87 ""
+  "BYOP.aux" 1700626282 1329 6141245a33e58e8f2971f940d99e2d3c "pdflatex"
+  "BYOP.tex" 1700626281 21282 b36eddb1e592ee7a33fbfe46d401feec ""
   "E_thick_shell.png" 1697436744 79579 1406b9e27dfab73cf6907b548fbb587e ""
   (generated)
   "BYOP.aux"
