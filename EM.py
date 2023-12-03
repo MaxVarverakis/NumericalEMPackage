@@ -47,7 +47,7 @@ class EM3D():
         self.arrowFitler((Ex, Ey, Ez), max_len)
         return Ex, Ey, Ez
 
-    def B_infinite_wire(self, direction: list, point: tuple, I = 1, wire_reference_points = 100, max_len = np.inf):
+    def B_infinite_wire(self, direction: list, point: tuple, I = 1, wire_reference_points = 1, max_len = np.inf):
         '''
         Parameters
         ----------
@@ -57,6 +57,8 @@ class EM3D():
             Point on the wire.
         I : float (optional)
             Current in the wire. Defaults to 1.
+        wire_reference_points : int
+            Number of points along the wire to use in the calculation. Defaults to 1 (use 1 if looking at field perpendicular to wire direction).
         '''
         Bx = np.zeros(self.X.shape)
         By = np.zeros(self.Y.shape)
@@ -66,10 +68,13 @@ class EM3D():
         # phi_hat = np.array([-direction[1], direction[0], 0])
         # phi_hat /= np.linalg.norm(phi_hat)
 
-        step_size = abs(self.lims[1] - self.lims[0]) / (wire_reference_points - 1)
-        wire_reference_points = [point + i * direction * step_size for i in range(-wire_reference_points, -wire_reference_points + 1)]
+        if wire_reference_points == 1:
+            wire_ref = [point]
+        else:
+            step_size = abs(self.lims[1] - self.lims[0]) / (wire_reference_points - 1)
+            wire_ref = [point + i * direction * step_size for i in range(-wire_reference_points, wire_reference_points + 1)]
         
-        for rSource in wire_reference_points:
+        for rSource in wire_ref:
             r = self.R - rSource
             for i in range(self.X.shape[0]):
                 for j in range(self.Y.shape[1]):
@@ -254,6 +259,46 @@ class EM2D():
                         V[i, j] += self.k * q / rMag
 
         return V
+
+    def B_infinite_wire(self, direction: list, point: tuple, I = 1, max_len = np.inf):
+        '''
+        Parameters
+        ----------
+        direction : list
+            Direction of the wire (-1 for into the plane and +1 for out of the plane).
+        point : tuple
+            Point on the wire that intersects plane.
+        I : float (optional)
+            Current in the wire. Defaults to 1.
+        '''
+        Bx = np.zeros(self.X.shape)
+        By = np.zeros(self.Y.shape)
+        direction /= np.linalg.norm(direction) # normalize direction vector
+        
+        r = self.R - point
+        for i in range(self.X.shape[0]):
+            for j in range(self.Y.shape[1]):
+                rMag = np.linalg.norm(r[i, j])
+                if rMag > 0.:
+                    rHat = r[i, j] / rMag
+                    dB = (I / rMag**2) * np.cross([0, 0, direction], rHat)
+                    Bx[i, j] += dB[0]
+                    By[i, j] += dB[1]
+
+        self.arrowFitler((Bx, By), max_len)
+        return Bx, By
+
+    def B_tot(self, wire_distribution: list, max_len = np.inf):
+        Bx = np.zeros(self.X.shape)
+        By = np.zeros(self.Y.shape)
+
+        for I, direction, point in wire_distribution:
+            Bx1, By1 = self.B_infinite_wire(direction, point, I)
+            Bx += Bx1
+            By += By1
+
+        self.arrowFitler((Bx, By), max_len)
+        return Bx, By
 
     def arrowFitler(self, F: tuple, max_len):
         Fx, Fy = F
