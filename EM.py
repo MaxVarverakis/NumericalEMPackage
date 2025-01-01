@@ -232,11 +232,11 @@ class EM2D():
     
     def E(self, charge_distribution, max_len = np.inf):
         Ex, Ey = np.zeros((self.X.shape[0], self.Y.shape[0])), np.zeros((self.X.shape[0], self.Y.shape[0]))
-        for q,x,y in charge_distribution:
-            rSource = np.array([x, y])
-            r = self.R - rSource
-            for i in range(self.X.shape[0]):
-                for j in range(self.Y.shape[0]):
+        for i in range(self.X.shape[0]):
+            for j in range(self.Y.shape[0]):
+                for q,x,y in charge_distribution:
+                    rSource = np.array([x, y])
+                    r = self.R - rSource
                     rMag = np.linalg.norm(r[i, j])
                     if rMag > 0.:
                         rHat = r[i, j] / rMag
